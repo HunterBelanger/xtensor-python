@@ -10,7 +10,6 @@
 cmake_minimum_required(VERSION 3.29)
 project(xtensor-python)
 
-set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 set(XTENSOR_PYTHON_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 # Versioning
@@ -46,7 +45,7 @@ else()
     message(STATUS "Found xtensor: ${xtensor_INCLUDE_DIRS}/xtensor")
 endif()
 
-find_package(Python COMPONENTS Interpreter REQUIRED)
+find_package(Python COMPONENTS Interpreter Development.Module NumPy REQUIRED)
 
 set(pybind11_REQUIRED_VERSION 2.6.1)
 if (NOT TARGET pybind11::headers)
@@ -60,13 +59,7 @@ else ()
     message(STATUS "Found pybind11 v${pybind11_VERSION}")
 endif ()
 
-# Look for NumPy headers, except if NUMPY_INCLUDE_DIRS is passed,
-# which is required under some circumstances (such as wasm, where
-# there is no real python executable)
-if(NOT NUMPY_INCLUDE_DIRS)
-    find_package(NumPy REQUIRED)
-endif()
-message(STATUS "Found numpy: ${NUMPY_INCLUDE_DIRS}")
+message(STATUS "Found numpy: ${Python_NumPy_INCLUDE_DIR}")
 
 # Build
 # =====
@@ -85,7 +78,7 @@ set(XTENSOR_PYTHON_HEADERS
 
 add_library(xtensor-python INTERFACE)
 target_include_directories(xtensor-python INTERFACE
-    "$<BUILD_INTERFACE:${XTENSOR_PYTHON_INCLUDE_DIR};${pybind11_INCLUDE_DIRS};${NUMPY_INCLUDE_DIRS}>"
+    "$<BUILD_INTERFACE:${XTENSOR_PYTHON_INCLUDE_DIR};${pybind11_INCLUDE_DIRS};${Python_NumPy_INCLUDE_DIR}>"
     $<INSTALL_INTERFACE:include>)
 target_link_libraries(xtensor-python INTERFACE xtensor)
 get_target_property(inc_dir xtensor-python INTERFACE_INCLUDE_DIRECTORIES)
