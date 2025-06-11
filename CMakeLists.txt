@@ -45,7 +45,7 @@ else()
     message(STATUS "Found xtensor: ${xtensor_INCLUDE_DIRS}/xtensor")
 endif()
 
-find_package(Python COMPONENTS Interpreter Development.Module NumPy REQUIRED)
+find_package(Python3 COMPONENTS Interpreter Development.Module NumPy REQUIRED)
 
 set(pybind11_REQUIRED_VERSION 2.6.1)
 if (NOT TARGET pybind11::headers)
@@ -59,7 +59,7 @@ else ()
     message(STATUS "Found pybind11 v${pybind11_VERSION}")
 endif ()
 
-message(STATUS "Found numpy: ${Python_NumPy_INCLUDE_DIR}")
+message(STATUS "Found numpy: ${Python3_NumPy_INCLUDE_DIRS}")
 
 # Build
 # =====
@@ -78,7 +78,7 @@ set(XTENSOR_PYTHON_HEADERS
 
 add_library(xtensor-python INTERFACE)
 target_include_directories(xtensor-python INTERFACE
-    "$<BUILD_INTERFACE:${XTENSOR_PYTHON_INCLUDE_DIR};${pybind11_INCLUDE_DIRS};${Python_NumPy_INCLUDE_DIR}>"
+    "$<BUILD_INTERFACE:${XTENSOR_PYTHON_INCLUDE_DIR};${pybind11_INCLUDE_DIRS};${Python3_NumPy_INCLUDE_DIRS}>"
     $<INSTALL_INTERFACE:include>)
 target_link_libraries(xtensor-python INTERFACE xtensor)
 get_target_property(inc_dir xtensor-python INTERFACE_INCLUDE_DIRECTORIES)
