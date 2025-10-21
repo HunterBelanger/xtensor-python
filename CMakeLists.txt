@@ -31,7 +31,7 @@ message(STATUS "xtensor-python v${${PROJECT_NAME}_VERSION}")
 # Dependencies
 # ============
 
-set(xtensor_REQUIRED_VERSION 0.26.0)
+set(xtensor_REQUIRED_VERSION 0.27.0)
 if(TARGET xtensor)
     set(xtensor_VERSION ${XTENSOR_VERSION_MAJOR}.${XTENSOR_VERSION_MINOR}.${XTENSOR_VERSION_PATCH})
     # Note: This is not SEMVER compatible comparison
@@ -47,7 +47,7 @@ endif()
 
 find_package(Python3 COMPONENTS Interpreter Development.Module NumPy REQUIRED)
 
-set(pybind11_REQUIRED_VERSION 2.6.1)
+set(pybind11_REQUIRED_VERSION 3.0.0)
 if (NOT TARGET pybind11::headers)
     # Defaults to ON for cmake >= 3.18
     # https://github.com/pybind/pybind11/blob/35ff42b56e9d34d9a944266eb25f2c899dbdfed7/CMakeLists.txt#L96
@@ -117,13 +117,14 @@ export(EXPORT ${PROJECT_NAME}-targets
 install(FILES ${XTENSOR_PYTHON_HEADERS}
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/xtensor-python)
 
+
 configure_file(${PROJECT_NAME}.pc.in
                "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.pc"
                 @ONLY)
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.pc"
         DESTINATION "${CMAKE_INSTALL_DATADIR}/pkgconfig/")
 
-set(XTENSOR_PYTHON_CMAKECONFIG_INSTALL_DIR "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}" CACHE
+set(XTENSOR_PYTHON_CMAKECONFIG_INSTALL_DIR "${CMAKE_INSTALL_DATADIR}/cmake/${PROJECT_NAME}" CACHE
     STRING "install path for xtensor-pythonConfig.cmake")
 
 configure_package_config_file(${PROJECT_NAME}Config.cmake.in
