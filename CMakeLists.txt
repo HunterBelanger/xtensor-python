@@ -59,8 +59,6 @@ else ()
     message(STATUS "Found pybind11 v${pybind11_VERSION}")
 endif ()
 
-message(STATUS "Found numpy: ${Python3_NumPy_INCLUDE_DIRS}")
-
 # Build
 # =====
 
@@ -77,10 +75,8 @@ set(XTENSOR_PYTHON_HEADERS
         )
 
 add_library(xtensor-python INTERFACE)
-target_include_directories(xtensor-python INTERFACE
-    "$<BUILD_INTERFACE:${XTENSOR_PYTHON_INCLUDE_DIR};${pybind11_INCLUDE_DIRS};${Python3_NumPy_INCLUDE_DIRS}>"
-    $<INSTALL_INTERFACE:include>)
-target_link_libraries(xtensor-python INTERFACE xtensor)
+target_include_directories(xtensor-python INTERFACE "$<BUILD_INTERFACE:${XTENSOR_PYTHON_INCLUDE_DIR}>" $<INSTALL_INTERFACE:include>)
+  target_link_libraries(xtensor-python INTERFACE xtensor pybind11::pybind11 Python3::NumPy)
 get_target_property(inc_dir xtensor-python INTERFACE_INCLUDE_DIRECTORIES)
 
 OPTION(BUILD_TESTS "xtensor test suite" OFF)
